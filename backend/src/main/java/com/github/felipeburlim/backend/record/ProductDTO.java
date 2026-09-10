@@ -1,15 +1,13 @@
 package com.github.felipeburlim.backend.record;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-public record ProductResponseDTO(
+public record ProductDTO(
         Long id,
         String name,
         String description,
-        String color,
-        String mark,
-        double price,
+        BigDecimal price,
         String categoryName,
-        List<String> imageUris
-) {
-}
+        List<ProductImageDTO> images
+) {}
