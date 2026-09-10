@@ -1,10 +1,8 @@
 package com.github.felipeburlim.backend.record;
 
-import java.util.UUID;
-
 public record ImageProductResponseDTO(
-        UUID id,
+        Long id,
         String uri,
-        UUID productId
+        Long productId
 ) {
 }

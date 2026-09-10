@@ -1,10 +1,9 @@
 package com.github.felipeburlim.backend.record;
 
 import java.util.List;
-import java.util.UUID;
 
 public record ProductResponseDTO(
-        UUID id,
+        Long id,
         String name,
         String description,
         String color,

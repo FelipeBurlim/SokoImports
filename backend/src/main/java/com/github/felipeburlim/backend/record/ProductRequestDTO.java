@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.util.List;
-import java.util.UUID;
 
 public record ProductRequestDTO(
 
@@ -20,7 +19,7 @@ public record ProductRequestDTO(
         double price,
 
         @NotNull(message = "O Id da categoria é obrigatorio")
-        UUID categoryId,
+        Long categoryId,
 
         List<String> imagesUris
 ) {

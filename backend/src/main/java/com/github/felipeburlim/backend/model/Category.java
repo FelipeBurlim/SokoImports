@@ -3,9 +3,12 @@ package com.github.felipeburlim.backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
+@Table(name = "category")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,10 +16,17 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private UUID id;
+    private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true, length = 100)
     private String name;
+
+    @Column(nullable = false, unique = true, length = 120)
+    private String slug;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Product> products =  new ArrayList<>();
 }

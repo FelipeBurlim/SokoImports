@@ -1,14 +1,14 @@
 package com.github.felipeburlim.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
+@Table(name = "product")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
@@ -16,22 +16,34 @@ import java.util.UUID;
 @Builder
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private UUID id;
+    private Long id;
 
-    @NotEmpty(message = "Informe um nome:")
+    @Column(nullable = false, length = 150)
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(nullable = false, length = 50)
     private String color;
+
+    @Column(nullable = false, length = 50)
     private String mark;
-    private double price;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private UUID categoryId;
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category categoryId;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<String> imageUris;
+    @Builder.Default
+    private List<ImageProduct> images =  new ArrayList<>();
+
+    @Column(name = "is_active")
+    @Builder.Default
+    private boolean isActive = true;
 }
