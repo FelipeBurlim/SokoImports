@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/{productId}")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class ProductImageController {
     private final ProductImageService productImageService;
 
+    @PostMapping("/{productId}")
     public ResponseEntity<ProductImageDTO> uploadImage(
             @PathVariable Long productId,
             @RequestParam("file") MultipartFile imageFile,

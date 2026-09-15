@@ -8,6 +8,8 @@ public record ProductDTO(
         String name,
         String description,
         BigDecimal price,
+        String color,
+        String mark,
         String categoryName,
         List<ProductImageDTO> images
 ) {}
