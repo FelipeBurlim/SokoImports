@@ -37,11 +37,11 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
-    private Category categoryId;
+    private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<ImageProduct> images =  new ArrayList<>();
+    private List<ProductImage> images =  new ArrayList<>();
 
     @Column(name = "is_active")
     @Builder.Default
