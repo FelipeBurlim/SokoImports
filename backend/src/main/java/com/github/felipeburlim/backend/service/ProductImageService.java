@@ -7,6 +7,7 @@ import com.github.felipeburlim.backend.repository.ProductImageRepository;
 import com.github.felipeburlim.backend.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +21,8 @@ public class ProductImageService {
     private final ProductRepository productRepository;
     private final StorageService storageService;
 
-    private static final String BASE_STORAGE_URL = "https://pub-your-bucket.r2.dev/";
-    //todo: fix the url
+    @Value("${storage.base-url}")
+    private String baseStorageUrl;
 
     @Transactional
     public ProductImageDTO saveImageDTO(Long productId, MultipartFile file, Integer sortOrder) {
@@ -33,7 +34,8 @@ public class ProductImageService {
 
         storageService.uploadFile(file, objectKey);
 
-        String publicUrl = BASE_STORAGE_URL + objectKey;
+        String formattedBaseUrl = baseStorageUrl.endsWith("/") ? baseStorageUrl : baseStorageUrl + "/";
+        String publicUrl = formattedBaseUrl + objectKey;
 
         ProductImage productImage = ProductImage.builder()
                 .url(publicUrl)
@@ -42,7 +44,7 @@ public class ProductImageService {
                 .product(product)
                 .build();
 
-        ProductImage savedImage =  productImageRepository.save(productImage);
+        ProductImage savedImage = productImageRepository.save(productImage);
 
         return new ProductImageDTO(
                 savedImage.getId(),

@@ -24,7 +24,7 @@ public class LocalStorageServiceImpl implements StorageService {
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
             return objectKey;
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar arquivo localmente", e);
+            throw new RuntimeException("Error saving file locally", e);
         }
     }
 
@@ -33,7 +33,7 @@ public class LocalStorageServiceImpl implements StorageService {
         try {
             Files.deleteIfExists(Paths.get(uploadDir + objectKey));
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao deletar arquivo", e);
+            throw new RuntimeException("Error deleting file", e);
         }
     }
 }
