@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/{productId}")
+@RequestMapping("/api/images}")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class ProductImageController {

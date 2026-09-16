@@ -11,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +40,11 @@ public class ProductService {
     }
 
     private ProductDTO mapToDTO(Product product) {
-        List<ProductImageDTO> imagesDto = product.getImages().stream()
-                .map(img -> new ProductImageDTO(img.getId(),
+        List<ProductImageDTO> imagesDto = Optional.ofNullable(product.getImages())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(img -> new ProductImageDTO(
+                        img.getId(),
                         img.getUrl(),
                         img.getSortOrder()))
                 .toList();

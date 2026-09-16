@@ -1,6 +1,6 @@
-package com.github.felipeburlim.backend.controller;
+package com.github.felipeburlim.backend.service;
 
-import com.github.felipeburlim.backend.service.StorageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +13,8 @@ import java.nio.file.StandardCopyOption;
 @Service
 public class LocalStorageServiceImpl implements StorageService {
 
-    private final String uploadDir = "uploads/";
+    @Value("${storage.local-dir}")
+    private String uploadDir;
 
     @Override
     public String uploadFile(MultipartFile file, String objectKey) {
