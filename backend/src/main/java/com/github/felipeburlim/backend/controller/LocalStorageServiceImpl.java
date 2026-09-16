@@ -1,0 +1,38 @@
+package com.github.felipeburlim.backend.controller;
+
+import com.github.felipeburlim.backend.service.StorageService;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+@Service
+public class LocalStorageServiceImpl implements StorageService {
+
+    private final String uploadDir = "uploads/";
+
+    @Override
+    public String uploadFile(MultipartFile file, String objectKey) {
+        try {
+            Path path = Paths.get(uploadDir + objectKey);
+            Files.createDirectories(path.getParent());
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            return objectKey;
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar arquivo localmente", e);
+        }
+    }
+
+    @Override
+    public void deleteFile(String objectKey) {
+        try {
+            Files.deleteIfExists(Paths.get(uploadDir + objectKey));
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao deletar arquivo", e);
+        }
+    }
+}
