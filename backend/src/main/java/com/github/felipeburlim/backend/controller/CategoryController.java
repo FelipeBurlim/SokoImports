@@ -30,17 +30,17 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@RequestParam Long id) {
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @GetMapping("/slug/{slug}")
-    public ResponseEntity<CategoryDTO> getCategoryBySlug(@RequestParam String slug) {
+    public ResponseEntity<CategoryDTO> getCategoryBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(categoryService.getCategoryBySlug(slug));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategoryById(@RequestParam Long id) {
+    public ResponseEntity<Void> deleteCategoryById(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return  ResponseEntity.noContent().build();
     }
