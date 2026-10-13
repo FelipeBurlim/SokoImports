@@ -14,7 +14,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   app:
-    build: .
+    build: src/main/java/com/github/felipeburlim/backend
     container_name: spring_backend
     ports:
       - "8080:8080"
