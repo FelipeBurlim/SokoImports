@@ -28,6 +28,18 @@ public class CategoryService {
             return mapToDTO(savedCategory);
         }
 
+    @Transactional
+    public CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        category.setName(categoryDTO.name());
+        category.setSlug(categoryDTO.slug());
+
+        Category updatedCategory = categoryRepository.save(category);
+        return mapToDTO(updatedCategory);
+    }
+
         public List<CategoryDTO> getAllCategories(){
             return categoryRepository.findAll().stream()
                     .map(this::mapToDTO)
