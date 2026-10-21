@@ -21,7 +21,7 @@ public class ProductImageService {
     private final ProductRepository productRepository;
     private final StorageService storageService;
 
-    @Value("${storage.base-url}")
+    @Value("${storage.base_url}")
     private String baseStorageUrl;
 
     @Transactional

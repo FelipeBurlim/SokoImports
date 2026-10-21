@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${storage.local-dir}")
+    @Value("${storage.local_dir}")
     private String localDir;
 
     @Override
