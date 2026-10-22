@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { INSTAGRAM_URL } from "@/utils/instagram";
 
@@ -10,8 +11,18 @@ export default function Header() {
           className="logo"
           aria-label="SOKO Imports — início"
         >
-          <strong>SOKO</strong>
-          <small>IMPORTS</small>
+          <Image
+            src="/logo-soko.png"
+            alt=""
+            width={44}
+            height={44}
+            className="logo-img"
+            priority
+          />
+          <span className="logo-text">
+            <strong>SOKO</strong>
+            <small>IMPORTS</small>
+          </span>
         </Link>
         <nav className="nav" aria-label="Navegação principal">
           <Link href="/#inicio">Início</Link>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { INSTAGRAM_URL } from "@/utils/instagram";
 
 interface HeroProps {
@@ -45,9 +46,15 @@ export default function Hero({ totalProducts, totalCategories }: HeroProps) {
         </dl>
       </div>
 
-      <div className="hero-brand" aria-hidden="true">
-        <strong>SOKO</strong>
-        <span>IMPORTS</span>
+      <div className="hero-brand">
+        <Image
+          src="/logo-soko.png"
+          alt="Logo oficial da SOKO Imports"
+          width={520}
+          height={520}
+          className="hero-logo"
+          priority
+        />
       </div>
     </section>
   );

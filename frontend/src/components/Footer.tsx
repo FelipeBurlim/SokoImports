@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/utils/instagram";
 
@@ -7,8 +8,17 @@ export default function Footer() {
       <div className="footer-container">
         <div className="footer-brand">
           <div className="logo">
-            <strong>SOKO</strong>
-            <small>IMPORTS</small>
+            <Image
+              src="/logo-soko.png"
+              alt=""
+              width={56}
+              height={56}
+              className="logo-img"
+            />
+            <span className="logo-text">
+              <strong>SOKO</strong>
+              <small>IMPORTS</small>
+            </span>
           </div>
           <p>Tecnologia e produtos importados em um só lugar.</p>
         </div>

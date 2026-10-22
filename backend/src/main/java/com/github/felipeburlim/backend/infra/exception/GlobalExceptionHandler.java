@@ -1,4 +1,4 @@
-package com.github.felipeburlim.backend.infra;
+package com.github.felipeburlim.backend.infra.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
