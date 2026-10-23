@@ -2,6 +2,7 @@ package com.github.felipeburlim.backend.service;
 
 import com.github.felipeburlim.backend.model.Category;
 import com.github.felipeburlim.backend.model.Product;
+import com.github.felipeburlim.backend.record.AdminProductDTO;
 import com.github.felipeburlim.backend.record.ProductDTO;
 import com.github.felipeburlim.backend.record.ProductImageDTO;
 import com.github.felipeburlim.backend.repository.CategoryRepository;
@@ -10,7 +11,9 @@ import com.github.felipeburlim.backend.specification.ProductSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +28,7 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final StorageService storageService;
 
     @Transactional
     public void deleteProduct(Long id){
@@ -60,7 +64,21 @@ public class ProductService {
     }
 
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable).map(this::mapToDTO);
+        Pageable stable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by("id"));
+        return productRepository.findAllActive(stable).map(this::mapToDTO);
+    }
+
+    public Page<AdminProductDTO> getAllProductsForAdmin(Pageable pageable) {
+        Pageable sorted = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC ,"id"));
+        return productRepository.findAll(sorted).map(this::mapToAdminDTO);
+    }
+
+    public AdminProductDTO getProductForAdmin(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Produto não encontrado"));
+        return mapToAdminDTO(product);
     }
 
     public Page<ProductDTO> searchProducts(String name, BigDecimal minPrice,
@@ -72,6 +90,10 @@ public class ProductService {
     public ProductDTO getProductById(@PathVariable Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        if(!product.isActive()){
+            throw new RuntimeException("Produto Inativo");
+        }
 
         return mapToDTO(product);
     }
@@ -94,6 +116,30 @@ public class ProductService {
                 product.getColor(),
                 product.getMark(),
                 product.getCategory().getName(),
+                imagesDto
+        );
+    }
+
+    private AdminProductDTO mapToAdminDTO(Product product) {
+        List<ProductImageDTO> imagesDto = Optional.ofNullable(product.getImages())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(img -> new ProductImageDTO(
+                        img.getId(),
+                        img.getUrl(),
+                        img.getSortOrder()
+                )).toList();
+
+        return new AdminProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getColor(),
+                product.getMark(),
+                product.getCategory().getId(),
+                product.getCategory().getName(),
+                product.isActive(),
                 imagesDto
         );
     }
