@@ -20,7 +20,7 @@ const FEATURES = [
 export default function About() {
   return (
     <section id="sobre" className="section-container">
-      <div className="section-header">  
+      <div className="section-header">
         <span className="eyebrow">Por que consultar a SOKO Imports?</span>
         <h2>Uma experiência direta, clara e organizada.</h2>
         <p>
