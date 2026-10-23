@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     Page<Product> findByCategory(Category category, Pageable pageable);
 
-    @Query("SELECT p FROM product WHERE p.isActive = true")
+    @Query("SELECT p FROM Product p WHERE p.isActive = true")
     Page<Product> findAllActive(Pageable pageable);
 }

@@ -27,6 +27,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: BinhaPassword
       STORAGE_LOCAL_DIR: uploads/
       STORAGE_BASE_URL: http://localhost:8080/uploads/
+      ADMIN_API_KEY: ${ADMIN_API_KEY}
     depends_on:
       postgres:
         condition: service_healthy

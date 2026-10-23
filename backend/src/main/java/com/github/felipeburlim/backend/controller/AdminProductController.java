@@ -24,6 +24,7 @@ public class AdminProductController {
         return ResponseEntity.ok(productService.getAllProductsForAdmin(pageable));
     }
 
+    @GetMapping("/{id}")
     public ResponseEntity<AdminProductDTO> getById(@PathVariable Long id){
         return ResponseEntity.ok(productService.getProductForAdmin(id));
     }

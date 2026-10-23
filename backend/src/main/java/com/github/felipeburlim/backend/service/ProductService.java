@@ -32,16 +32,23 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long id){
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto nao encontrado"));
+
+        Optional.ofNullable(product.getImages())
+                .orElse(Collections.emptyList())
+                .forEach(image -> storageService.deleteFile(image.getObjectKey()));
+
+        productRepository.delete(product);
     }
 
     @Transactional
     public ProductDTO updateProduct(Long id, ProductDTO productDTO, Long categoryId) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new RuntimeException("Produto nao encontrado"));
 
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category Not Found"));
+                .orElseThrow(() -> new RuntimeException("Categoria nao encontrado"));
 
         product.setName(productDTO.name());
         product.setDescription(productDTO.description());
@@ -83,7 +90,9 @@ public class ProductService {
 
     public Page<ProductDTO> searchProducts(String name, BigDecimal minPrice,
                                            BigDecimal maxPrice,Long categoryId, Pageable pageable) {
-        Specification<Product> spec = ProductSpecification.filterBy(name, minPrice, maxPrice, categoryId);
+        Specification<Product> active = (root, query, cb) ->cb.isTrue(root.get("isActive"));
+        Specification<Product> spec = active
+                .and(ProductSpecification.filterBy(name, minPrice, maxPrice, categoryId));
         return productRepository.findAll(spec,pageable).map(this::mapToDTO);
     }
 
