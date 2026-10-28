@@ -1,0 +1,57 @@
+# Produção: banco e backend NÃO ficam expostos; só o Caddy (80/443) recebe tráfego.
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: soko_bd
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d soko_bd"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/soko_bd
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      STORAGE_LOCAL_DIR: uploads/
+      STORAGE_BASE_URL: https://${API_DOMAIN}/uploads/
+      ADMIN_API_KEY: ${ADMIN_API_KEY}
+      SPRING_JPA_SHOW_SQL: "false"
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=50"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "8080"
+    volumes:
+      - uploads_data:/app/uploads
+
+  caddy:
+    image: caddy:2
+    restart: always
+    environment:
+      API_DOMAIN: ${API_DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+
+volumes:
+  pgdata:
+  uploads_data:
+  caddy_data:
+  caddy_config:

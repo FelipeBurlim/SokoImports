@@ -1097,3 +1097,12 @@ code {
     grid-column: auto;
   }
 }
+
+.footer-credit {
+  color: var(--silver);
+  font-weight: 600;
+}
+.footer-credit:hover {
+  color: #fff;
+  text-decoration: underline;
+}

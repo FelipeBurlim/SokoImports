@@ -52,6 +52,17 @@ export default function Footer() {
           Preços e disponibilidade podem sofrer alterações. Consulte nossa
           equipe pelo Instagram.
         </span>
+        <span>
+          Desenvolvido por{" "}
+          <a
+            href="https://github.com/FelipeBurlim"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-credit"
+          >
+            Felipe Burlim
+          </a>
+        </span>
       </div>
     </footer>
   );

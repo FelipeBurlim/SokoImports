@@ -1,0 +1,8 @@
+{$API_DOMAIN} {
+	encode zstd gzip
+
+	@uploads path /uploads/*
+	header @uploads Cache-Control "public, max-age=2592000"
+
+	reverse_proxy app:8080
+}
